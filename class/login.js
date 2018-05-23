@@ -23,10 +23,18 @@ http.createServer(function (req, res) {   //创建服务
     if (pathname == '/') {
         server.index(req, res);
     }
-    // 注册页面 
-    else if (pathname == '/class-login' && req.method == 'POST') {
-        server.login(req, res);
+    //学生登录页面
+    else if(pathname == '/studentLogin' ){
+        server.studentLogin(req, res);
     }
+    //学生信息查询
+    else if(pathname == '/studentInfro' && req.method == 'POST'){
+        server.studentInfro(req, res);
+    }
+    else if(pathname == '/studentScore' && req.method == 'GET'){
+        server.studentScore(req, res);
+    }
+
 }).listen(8080, function () {
     console.log('http://localhost:8080');
 });

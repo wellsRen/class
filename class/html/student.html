@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>学生信息</title>
+</head>
+<body>
+    <h1>学生信息</h1>
+    <table>
+        <tr>
+            <td>name</td>
+            <td>学号</td>
+            <td>高三</td>
+            <td><a href="/studentScore?id=1">查看成绩</a></td>
+        </tr>
+    </table>
+    <script type="text/javascript" src="html/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript" src="html/jquery.cookie.js"></script>   
+    <script>
+        $(function(){
+            var studentInfo = $.cookie('studentInfo');
+            var html = `<tr>
+                            <td>name</td>
+                            <td>学号</td>
+                            <td>高三</td>
+                            <td><a href="/studentScore?id=1">查看成绩</a></td>
+                        </tr>`
+            $.each(studentInfo,function(tt,i){
+                $("table").append(`<tr>
+                            <td>${tt.name}</td>
+                            <td>${tt.brith}</td>
+                            <td>${tt.name}</td>
+                            <td><a href="/studentScore?id=${tt.id}">查看成绩</a></td>
+                        </tr>`)
+            })
+
+            console.log(studentInfo.id);
+            // var tabledata = $.cookie("tabledata");
+            // console.log(tabledata);
+        //     var id = $("#student").attr("")
+        //     $.ajax({
+        //         type : "post",
+        //         url : "/studentInfro",
+        //         data : {id},
+        //         timeout : 10000,
+        //         success : function(data){
+        //             console.log(data)
+        //             // if(data.success == 200){
+        //             //     alert("登录成功!");
+        //             // } else {
+        //             //     alert("登录失败!");
+        //             // }
+        //         },error:function(){
+        //             alert("服务器请求超时！");
+        //         }
+        //     })
+        })
+    </script>
+    
+</body>
+</html>
