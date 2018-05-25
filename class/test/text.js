@@ -1,24 +1,21 @@
 var mysql  = require('mysql');  
 var connection;
+let data = [];
 module.exports = {
-  sqlLink : function(sql){
-    this.mesql()
+  sqlLink : function(sql,callback){
     if(sql != ''){
-      let data = [];
+      //查询this.mesql()
+      this.mesql();
       connection.connect();
-      //查询
       connection.query(sql,function (err, result) {
         if(err){
-          console.log('[SELECT ERROR] - ',err.username);
-          return;
+          console.log('[SELECT ERROR] - ',err);
+          callback('');
+          return false;
         }
-        data = result;
-        console.log(data) 
-        return data;
+        callback(result);
       });
       connection.end();
-      return data;
-      // %SystemRoot%\system32\cmd.exe;
     }
   },
   mesql : function(){

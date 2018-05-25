@@ -5,57 +5,35 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>学生信息</title>
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <script type="text/javascript" src="js/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript" src="js/jquery.cookie.js"></script>   
 </head>
 <body>
     <h1>学生信息</h1>
-    <table>
+    <table class="table">
         <tr>
-            <td>name</td>
-            <td>学号</td>
-            <td>高三</td>
-            <td><a href="/studentScore?id=1">查看成绩</a></td>
+            <td class="td" id='' name='first'>姓名</td>
+            <td class="td" >年龄</td>
+            <td class="td" >年级</td>
+            <td class="td" >操作</td>
         </tr>
     </table>
-    <script type="text/javascript" src="html/jquery-3.3.1.min.js"></script>
-    <script type="text/javascript" src="html/jquery.cookie.js"></script>   
+    
     <script>
         $(function(){
             var studentInfo = $.cookie('studentInfo');
-            var html = `<tr>
-                            <td>name</td>
-                            <td>学号</td>
-                            <td>高三</td>
-                            <td><a href="/studentScore?id=1">查看成绩</a></td>
-                        </tr>`
-            $.each(studentInfo,function(tt,i){
-                $("table").append(`<tr>
-                            <td>${tt.name}</td>
-                            <td>${tt.brith}</td>
-                            <td>${tt.name}</td>
-                            <td><a href="/studentScore?id=${tt.id}">查看成绩</a></td>
-                        </tr>`)
-            })
-
-            console.log(studentInfo.id);
-            // var tabledata = $.cookie("tabledata");
-            // console.log(tabledata);
-        //     var id = $("#student").attr("")
-        //     $.ajax({
-        //         type : "post",
-        //         url : "/studentInfro",
-        //         data : {id},
-        //         timeout : 10000,
-        //         success : function(data){
-        //             console.log(data)
-        //             // if(data.success == 200){
-        //             //     alert("登录成功!");
-        //             // } else {
-        //             //     alert("登录失败!");
-        //             // }
-        //         },error:function(){
-        //             alert("服务器请求超时！");
-        //         }
-        //     })
+            if(studentInfo!=undefined){
+                $("[name=first]").attr("id",studentInfo);
+                $.getJSON('json/student.json',function(tt) { 
+                    $("table").append(`<tr>
+                                    <td>${tt[0].name}</td>
+                                    <td>${tt[0].age}</td>
+                                    <td>${tt[0].grade}</td>
+                                    <td><a href="/studentScore?id=${tt[0].studentID}">查看成绩</a></td>
+                                </tr>`)
+                })
+            }
         })
     </script>
     

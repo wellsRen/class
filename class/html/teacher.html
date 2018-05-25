@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>老师登录</title>
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <script src="js//jquery-3.3.1.min.js"></script>
+</head>
+<body>
+    <h1>教师信息</h1>
+    <table class="table">
+        <tr>
+            <td>姓名</td>
+            <td>职位</td>
+        </tr>
+    </table>
+    <script>
+        $(function(){
+            $.getJSON("json/teach.json",function(tt){
+                $("table").append(`<tr>
+                                    <td>${tt[0].name}</td>
+                                    <td>${tt[0].subject}老师</td>
+                                </tr>`)
+            })
+        })
+    </script>
+
+</body>
+</html>

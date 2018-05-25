@@ -20,77 +20,99 @@ module.exports = {
             data += chunk;
         }).on('end', function () {
             req.cookies = _left.parseCookie(req.headers.cookie);
-            if(!req.cookies.studentInfo){
-                
-                var tt = querystring.parse(data);
+            var tt = querystring.parse(data);
+            if(tt.username!='' && tt.username!=''){
                 var name = tt.username;
                 var password = tt.password;
                 var sql = "select * from student where name = '" + name + "' and password = " + password;
                 
-                var tabledata = text.sqlLink(sql);
-                fs.readFile('html/student.html', function (err, data) {
-                    console.log(tabledata);
-
-                    res.setHeader('Set-Cookie',_left.serialize('studentInfo',tabledata,'utf8',{maxAge : '5000'}));
-                    res.writeHead(200, { 'Content-Type': 'text/html' });
-                    res.end(data);
+                text.sqlLink(sql,function(tabledata){
+                    if(tabledata!=''){
+                        fs.writeFileSync("json/student.json",JSON.stringify(tabledata));
+                        fs.readFile('html/student.html', function (err, data) {
+                            res.setHeader('Set-Cookie',_left.serialize('studentInfo',tabledata[0].studentID,'utf8',{maxAge : '5000'}));
+                            res.writeHead(200, { 'Content-Type': 'text/html' });
+                            res.end(data);
+                        });
+                    } else {
+                        fs.readFile('html/index.html', function (err, data) {
+                            res.writeHead(200, { 'Content-Type': 'text/html' });
+                            // res.json([{"china":"你好世界"}])
+                            res.end(data);
+                        });
+                    }
                 });
-            }else{
-                fs.readFile('html/student.html', function (err, data) {
-                    res.writeHead(200,{'Content-Type':'text/html;charset=utf-8'});
+            } else {
+                fs.readFile('html/index.html', function (err, data) {
+                    res.writeHead(200, { 'Content-Type': 'text/html' });
                     res.end(data);
                 });
             }
         });
     },
-    // 学生信息查询
-    studentInfro : function(req, res){
-        var _left = this;
-        var data;
-
-        if(!req.cookies.isVisit){
-            var sql = "select * from student where id = " + id;
-            // var taba = _left.htmlload(res,sql);
-            res.write(taba);
-            res.end();
-        } else {
-            res.write(false);
-            res.end();
-        }
+    student : function(req, res){
+       
     },
     // 学生成绩查询
     studentScore : function(req, res){
         var _left = this;
-        var tt;
-       
-        tt = url.parse(req.url,true).query;
-
-        var sql = "select * from score where studentID = " + tt.id;
-        var taba = text.sqlLink(sql);
-
-        fs.readFile('html/studentInfo.html', function (err, data) {
-            res.writeHead(200,{'Content-Type':'text/html;charset=utf-8'});
+        var data = '';
+        var tt = url.parse(req.url,true).query;
+        var sql = "select s.name,c.score from student as s ,score as c where s.studentID = " + tt.id + " and  c.studentID = "+ tt.id;
+        text.sqlLink(sql,function(tabledata){
+            fs.writeFileSync("json/studentInfo.json",JSON.stringify(tabledata));
+            fs.readFile('html/studentInfo.html', function (err, data) {
+                res.writeHead(200,{'Content-Type':'text/html;charset=utf-8'});
+                res.end(data);
+            });
+        })
+    },
+    // 老师首页
+    login : function(req, res){
+        fs.readFile('html/login.html', function (err, data) {
+            res.writeHead(200, { 'Content-Type': 'text/html' });
             res.end(data);
         });
-    }
-    ,
-    // htmlload : function(res,sql,html){
-    //     var _left = this;
-    //     if(html==undefined){
-    //         var tabledata = text.sqlLink(sql);
-    //         return tabledata;
-    //     } else {
-    //         var tabledata = text.sqlLink(sql);
-    //         if(tabledata != ''){
-    //             fs.readFile('html/student.html', function (err, data) {
-    //                 res.writeHead(200, { 'Content-Type': 'text/html' });
-    //                 res.setHeader('Set-Cookie',_left.serialize('studentInfo',tabledata,'utf8',{maxAge : '5000'}));
-    //                 res.end(data);
-    //             });
-    //             return tabledata;
-    //         }
-    //     }
-    // },
+    },
+    // 老师登录
+    teacherLogin : function(req, res){
+        var _left = this;
+        var data = '';
+        req.on('data', function (chunk) {
+            data += chunk;
+        }).on('end', function () {
+            req.cookies = _left.parseCookie(req.headers.cookie);
+            var tt = querystring.parse(data);
+            if(tt.username!='' && tt.username!=''){
+                var name = tt.username;
+                var password = tt.password;
+                var sql = "select * from teach where name = '" + name + "' and password = " + password;
+                
+                text.sqlLink(sql,function(tabledata){
+                    console.log(tabledata);
+                    if(tabledata!=''){
+                        fs.writeFileSync("json/teach.json",JSON.stringify(tabledata));
+                        fs.readFile('html/teacher.html', function (err, data) {
+                            res.setHeader('Set-Cookie',_left.serialize('studentInfo',tabledata[0].teachID,'utf8',{maxAge : '5000'}));
+                            res.writeHead(200, { 'Content-Type': 'text/html' });
+                            res.end(data);
+                        });
+                    } else {
+                        fs.readFile('html/login.html', function (err, data) {
+                            res.writeHead(200, { 'Content-Type': 'text/html' });
+                            // res.json([{"china":"你好世界"}])
+                            res.end(data);
+                        });
+                    }
+                });
+            } else {
+                fs.readFile('html/login.html', function (err, data) {
+                    res.writeHead(200, { 'Content-Type': 'text/html' });
+                    res.end(data);
+                });
+            }
+        });
+    },
      handle_request : function(req, res) {
         // 不管是什么请求，对文件的请求的话，应该是针对后缀名进行内容读取发放。
         var suffix = req.url;

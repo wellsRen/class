@@ -5,11 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
+    <link rel="stylesheet" href="css/bootstrap.css">
 </head>
 <body>
-    <table>
+    <table class='table'>
         <tr>
-            <td></td>
+            <td>姓名</td>
             <td>语文</td>
             <td>数学</td>
             <td>英语</td>
@@ -18,38 +19,21 @@
             <td>地理</td>
             <td>历史</td>
         </tr>
-        <tr>
-            <td>name</td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-        </tr>
     </table>
-    <script type="text/javascript" src="html/jquery-3.3.1.min.js"></script>
-    <script type="text/javascript" src="html/jquery.cookie.js"></script>   
+    <script type="text/javascript" src="js/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript" src="js/jquery.cookie.js"></script>   
     <script>
         $(function(){
             var studentInfo = $.cookie('studentInfo');
-            var studentteach = $.cookie('studentteach');
-            var html = `<tr>
-                            <td>name</td>
-                            <td>学号</td>
-                            <td>高三</td>
-                            <td><a href="/studentScore?id=1">查看成绩</a></td>
-                        </tr>`
-            $.each(studentteach,function(tt,i){
-                $("table").append(`<td>${studentInfo.id}</td>
-                                <td>${tt.score}</td>
-                                <td>${tt.score}</td>
-                                <td>${tt.score}</td>
-                                <td>${tt.score}</td>
-                                <td>${tt.score}</td>
-                                <td>${tt.score}</td>
-                                <td>${tt.score}</td>`)
+            $.getJSON('json/studentInfo.json',function(result) { 
+                $("table").append(`<td>${result[0].name}</td>
+                                    <td>${result[0].score}</td>
+                                    <td>${result[1].score}</td>
+                                    <td>${result[2].score}</td>
+                                    <td>${result[3].score}</td>
+                                    <td>${result[4].score}</td>
+                                    <td>${result[5].score}</td>
+                                    <td>${result[6].score}</td>`);
             })
         })
     </script>
